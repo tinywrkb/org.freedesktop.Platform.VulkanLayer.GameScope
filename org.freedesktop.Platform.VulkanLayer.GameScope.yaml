@@ -33,6 +33,12 @@ modules:
       - type: archive
         url: https://github.com/Plagman/gamescope/archive/3.11.44/gamescope-3.11.44.tar.gz
         sha256: 597fc4535240ad13fb721d4068a18558e2bb30c9cb00570b7aac814479f2b05c
+        # TODO: disabled due to bad tagging pratices
+       #x-checker-data:
+       #  type: anitya
+       #  project-id: 242438
+       #  stable-only: true
+       #  url-template: https://github.com/Plagman/gamescope/archive/$version/gamescope-$version.tar.gz
       - type: shell
         commands:
           - ln -s ${FLATPAK_DEST}/include/stb subprojects/stb
@@ -65,7 +71,10 @@ modules:
             sha256: c47cf5abe21e1d620afccd159c23fe71dfa86eb270015a7646a4f79e9bfd5503
             x-checker-data:
               type: json
-              url-template: https://github.com/nothings/stb/archive/$version/stb-$version.tar.gz
+              url: https://api.github.com/repos/nothings/stb/commits?sha=master&per_page=1
+              version-query: .[].sha
+              timestamp-query: .[].commit.committer.date
+              url-query: '"https://github.com/nothings/stb/archive/" + $version + "/stb-" + $version + ".tar.gz"'
         cleanup:
           - '*'
 
@@ -262,7 +271,7 @@ modules:
                       type: anitya
                       project-id: 15055
                       stable-only: true
-                      url-template: https://xorg.freedesktop.org/releases/individual/font/font-util-$version.3.tar.xz
+                      url-template: https://xorg.freedesktop.org/releases/individual/font/font-util-$version.tar.xz
                 cleanup:
                   - '*'
 
