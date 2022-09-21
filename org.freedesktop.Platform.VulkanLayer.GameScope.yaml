@@ -31,8 +31,8 @@ modules:
       - -Dforce_fallback_for=stb
     sources:
       - type: archive
-        url: https://github.com/Plagman/gamescope/archive/3.11.44/gamescope-3.11.44.tar.gz
-        sha256: 597fc4535240ad13fb721d4068a18558e2bb30c9cb00570b7aac814479f2b05c
+        url: https://github.com/Plagman/gamescope/archive/3.11.45/gamescope-3.11.45.tar.gz
+        sha256: a2706ee3d96ae0c4cbe1aa64927a5ad9175352c87b49e3a59d516bd54d843ab7
         # TODO: disabled due to bad tagging pratices
        #x-checker-data:
        #  type: anitya
