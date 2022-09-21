@@ -1,0 +1,280 @@
+id: org.freedesktop.Platform.VulkanLayer.GameScope
+branch: '22.08'
+runtime: org.freedesktop.Platform
+runtime-version: '22.08'
+sdk: org.freedesktop.Sdk
+build-extension: true
+separate-locales: false
+
+build-options:
+  cflags: -I/usr/lib/extensions/vulkan/GameScope/include
+  cxxflags: -I/usr/lib/extensions/vulkan/GameScope/include
+  ldflags: -L/usr/lib/extensions/vulkan/GameScope/lib
+  prefix: /usr/lib/extensions/vulkan/GameScope
+  libdir: /usr/lib/extensions/vulkan/GameScope/lib
+  prepend-path: /usr/lib/extensions/vulkan/GameScope/bin
+  prepend-ld-library-path: /usr/lib/extensions/vulkan/GameScope/lib
+  prepend-pkg-config-path: /usr/lib/extensions/vulkan/GameScope/lib/pkgconfig
+  strip: true
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/man
+  - '*.a'
+  - '*.la'
+
+modules:
+  - name: gamescope
+    buildsystem: meson
+    config-opts:
+      - -Dpipewire=enabled
+      - -Dforce_fallback_for=stb
+    sources:
+      - type: archive
+        url: https://github.com/Plagman/gamescope/archive/3.11.44/gamescope-3.11.44.tar.gz
+        sha256: 597fc4535240ad13fb721d4068a18558e2bb30c9cb00570b7aac814479f2b05c
+      - type: shell
+        commands:
+          - ln -s ${FLATPAK_DEST}/include/stb subprojects/stb
+          - install -Dm644 subprojects/packagefiles/stb/meson.build -t subprojects/stb/
+
+    modules:
+      - name: libliftoff
+        buildsystem: meson
+        sources:
+          - type: archive
+            url: https://gitlab.freedesktop.org/emersion/libliftoff/-/releases/v0.3.0/downloads/libliftoff-0.3.0.tar.gz
+            sha256: 5e6afe189e47d3af3617fc82e3a21db18d756bd44c20b5a942a1d50b814159b4
+            x-checker-data:
+              type: anitya
+              project-id: 236274
+              stable-only: true
+              url-template: https://gitlab.freedesktop.org/emersion/libliftoff/-/releases/v$version/downloads/libliftoff-$version.tar.gz
+
+      - name: stb
+        buildsystem: simple
+        build-commands:
+          - |
+            set -e
+            for f in *.h; do
+              install -Dm644 $f -t ${FLATPAK_DEST}/include/stb/
+            done
+        sources:
+          - type: archive
+            url: https://github.com/nothings/stb/archive/8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55/stb-8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55.tar.gz
+            sha256: c47cf5abe21e1d620afccd159c23fe71dfa86eb270015a7646a4f79e9bfd5503
+            x-checker-data:
+              type: json
+              url-template: https://github.com/nothings/stb/archive/$version/stb-$version.tar.gz
+        cleanup:
+          - '*'
+
+      - name: wlroots
+        buildsystem: meson
+        config-opts:
+          - --libdir=lib
+          - -Dxcb-errors=disabled
+          - -Dxwayland=enabled
+          - -Dexamples=false
+          - -Drenderers=gles2
+          - -Dbackends=drm,libinput,x11
+          - -Dwerror=false
+        sources:
+          - type: archive
+            url: https://gitlab.freedesktop.org/wlroots/wlroots/-/archive/0.15.1/wlroots-0.15.1.tar.gz
+            sha256: 5b92f11a52d978919ed1306e0d54c9d59f1762b28d44f0a2da3ef3b351305373
+            x-checker-data:
+              type: anitya
+              project-id: 18357
+              stable-only: true
+              url-template: https://gitlab.freedesktop.org/wlroots/wlroots/-/archive/$version/wlroots-$version.tar.gz
+
+        modules:
+          - name: seatd
+            buildsystem: meson
+            config-opts:
+              - -Dlibseat-logind=disabled
+              - -Dlibseat-seatd=enabled
+              - -Dlibseat-builtin=disabled
+              - -Dserver=disabled
+              - -Dexamples=disabled
+              - -Dman-pages=disabled
+            sources:
+              - type: archive
+                url: https://git.sr.ht/~kennylevinsen/seatd/archive/0.7.0.tar.gz
+                sha256: 210ddf8efa1149cde4dd35908bef8e9e63c2edaa0cdb5435f2e6db277fafff3c
+                x-checker-data:
+                  type: anitya
+                  project-id: 234932
+                  stable-only: true
+                  url-template: https://git.sr.ht/~kennylevinsen/seatd/archive/$version.tar.gz
+
+          - name: libinput
+            buildsystem: meson
+            config-opts:
+              - --libexec=lib
+              - -Dlibwacom=false
+              - -Ddebug-gui=false
+              - -Dtests=false
+              - -Ddocumentation=false
+              - -Dzshcompletiondir=no
+            sources:
+              - type: archive
+                url: https://gitlab.freedesktop.org/libinput/libinput/-/archive/1.21.0/libinput-1.21.0.tar.gz
+                sha256: 1b23c180f5b297303ed36f5a549910f5d320b0eb21052eac67a966d4eaa4e01d
+                x-checker-data:
+                  type: anitya
+                  project-id: 5781
+                  stable-only: true
+                  url-template: https://gitlab.freedesktop.org/libinput/libinput/-/archive/$version/libinput-$version.tar.gz
+            cleanup:
+              - /bin
+              - /etc
+              - /lib/libinput
+              - /lib/udev
+              - /share
+
+            modules:
+              - name: libevdev
+                buildsystem: meson
+                config-opts:
+                  - -Dtests=disabled
+                  - -Ddocumentation=disabled
+                sources:
+                  - type: archive
+                    url: https://freedesktop.org/software/libevdev/libevdev-1.13.0.tar.xz
+                    sha256: 9edf2006cc86a5055279647c38ec923d11a821ee4dc2c3033e8d20e8ee237cd9
+                    x-checker-data:
+                      type: anitya
+                      project-id: 20540
+                      stable-only: true
+                      url-template: https://freedesktop.org/software/libevdev/libevdev-$version.tar.xz
+                cleanup:
+                  - /bin
+
+              - name: mtdev
+                config-opts:
+                  - --disable-static
+                sources:
+                  - type: archive
+                    url: https://bitmath.org/code/mtdev/mtdev-1.1.6.tar.bz2
+                    sha256: 15d7b28da8ac71d8bc8c9287c2045fd174267bc740bec10cfda332dc1204e0e0
+                    x-checker-data:
+                      type: anitya
+                      project-id: 8868
+                      stable-only: true
+                      url-template: https://bitmath.org/code/mtdev/mtdev-$version.tar.bz2
+                cleanup:
+                  - /bin
+
+          - name: xorg-xwayland
+            buildsystem: meson
+            config-opts:
+              - -Dsecure-rpc=false
+            sources:
+              - type: archive
+                url: https://xorg.freedesktop.org/archive/individual/xserver/xwayland-22.1.3.tar.xz
+                sha256: a712eb7bce32cd934df36814b5dd046aa670899c16fe98f2afb003578f86a1c5
+                x-checker-data:
+                  type: anitya
+                  project-id: 180949
+                  stable-only: true
+                  url-template: https://xorg.freedesktop.org/archive/individual/xserver/xwayland-$version.tar.xz
+            cleanup:
+              - /lib/xorg
+
+            modules:
+              # NOTE: libbsd is an optional dependency
+             #- name: libbsd
+             #  config-opts:
+             #    - --disable-static
+             #  sources:
+             #    - type: archive
+             #      url: https://libbsd.freedesktop.org/releases/libbsd-0.11.6.tar.xz
+             #      sha256: 19b38f3172eaf693e6e1c68714636190c7e48851e45224d720b3b5bc0499b5df
+             #      x-checker-data:
+             #        type: anitya
+             #        project-id: 1567
+             #        stable-only: true
+             #        url-template: https://libbsd.freedesktop.org/releases/libbsd-$version.tar.xz
+
+             #  modules:
+             #    - name: libmd
+             #      config-opts:
+             #        - --disable-static
+             #      sources:
+             #        - type: archive
+             #          url: https://libbsd.freedesktop.org/releases/libmd-1.0.4.tar.xz
+             #          sha256: f51c921042e34beddeded4b75557656559cf5b1f2448033b4c1eec11c07e530f
+             #          x-checker-data:
+             #            type: anitya
+             #            project-id: 15525
+             #            stable-only: true
+             #            url-template: https://libbsd.freedesktop.org/releases/libmd-$version.tar.xz
+
+              - name: libxcvt
+                buildsystem: meson
+                sources:
+                  - type: archive
+                    url: https://xorg.freedesktop.org/releases/individual/lib/libxcvt-0.1.2.tar.xz
+                    sha256: 0561690544796e25cfbd71806ba1b0d797ffe464e9796411123e79450f71db38
+                    x-checker-data:
+                      type: anitya
+                      project-id: 235147
+                      stable-only: true
+                      url-template: https://xorg.freedesktop.org/releases/individual/lib/libxcvt-$version.tar.xz
+                cleanup:
+                  - /bin
+
+              - name: libxfont2
+                config-opts:
+                  - --disable-static
+                sources:
+                  - type: archive
+                    url: https://xorg.freedesktop.org/releases/individual/lib/libXfont2-2.0.6.tar.xz
+                    sha256: 74ca20017eb0fb3f56d8d5e60685f560fc85e5ff3d84c61c4cb891e40c27aef4
+                    x-checker-data:
+                      type: anitya
+                      project-id: 17165
+                      stable-only: true
+                      url-template: https://xorg.freedesktop.org/releases/individual/lib/libXfont2-$version.tar.xz
+
+                modules:
+                  - name: libfontenc
+                    config-opts:
+                      - --disable-static
+                    sources:
+                      - type: archive
+                        url: https://xorg.freedesktop.org/releases/individual/lib/libfontenc-1.1.6.tar.xz
+                        sha256: ea8606ed5255dda8f570b7d1a74d59ee8d198675b2f114d07807431e6ba1d111
+                        x-checker-data:
+                          type: anitya
+                          project-id: 1613
+                          stable-only: true
+                          url-template: https://xorg.freedesktop.org/releases/individual/lib/libfontenc-$version.tar.xz
+
+              - name: xorg-font-util
+                sources:
+                  - type: archive
+                    url: https://xorg.freedesktop.org/releases/individual/font/font-util-1.3.3.tar.xz
+                    sha256: e791c890779c40056ab63aaed5e031bb6e2890a98418ca09c534e6261a2eebd2
+                    x-checker-data:
+                      type: anitya
+                      project-id: 15055
+                      stable-only: true
+                      url-template: https://xorg.freedesktop.org/releases/individual/font/font-util-$version.3.tar.xz
+                cleanup:
+                  - '*'
+
+              - name: xres
+                config-opts:
+                  - --disable-static
+                sources:
+                  - type: archive
+                    url: https://xorg.freedesktop.org/releases/individual/lib/libXres-1.2.1.tar.gz
+                    sha256: 918fb33c3897b389a1fbb51571c5c04c6b297058df286d8b48faa5af85e88bcc
+                    x-checker-data:
+                      type: anitya
+                      project-id: 1790
+                      stable-only: true
+                      url-template: https://xorg.freedesktop.org/releases/individual/lib/libXres-$version.tar.gz
