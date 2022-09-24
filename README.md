@@ -87,5 +87,6 @@ Possibly others are [keyboard modifiers forwarding](https://github.com/Plagman/g
 I don't plan to submit this, and if fact, I'm very much against it due to the current limitations of runtime extensions,
 and the existence of shared libraries in the extension.
 
-If this GameScope extension is actually useful for existing Flatpak applications, then in my opinion it should be added
-to the runtime, and an application that needs a newer version than the one provided by the runtime can bundle its own.
+If this GameScope extension is actually useful with existing Flatpak applications, then in my opinion GameScope should
+be added to the runtime, and an application that needs a newer version than the one provided by the runtime can bundle
+its own version.
