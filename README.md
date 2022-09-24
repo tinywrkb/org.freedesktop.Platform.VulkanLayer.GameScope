@@ -32,7 +32,9 @@ provided by an application, if it does packages the same libraries.
 This includes `libevdev`, `libfontenc`, `libinput`, `libliftoff`, `libmtdev`, `libseat`, `libwlroots`, `libxcvt`, `libXfont2`, `libXRes`.  
 As I haven't made too much use of this extension yet, this doesn't concern me currently, but I might look into statically
 linking against these libraries later.  
-Please file a bug report if you hit an issue related to a wrong shared lib resolution/loading.
+Please file a bug report if you hit an issue related to a wrong shared lib resolution/loading.  
+There's an experimental [static_libs branch](https://github.com/tinywrkb/org.freedesktop.Platform.VulkanLayer.GameScope/tree/static_libs)
+that avoids adding shared libraries, but it wasn't confirmed that it doesn't introduce regressions.
 
 While this should be obvious, be aware that the extension's branch/version must match the runtime's one.
 
