@@ -47,6 +47,8 @@ modules:
     modules:
       - name: libliftoff
         buildsystem: meson
+        config-opts:
+          - --default-library=static
         sources:
           - type: archive
             url: https://gitlab.freedesktop.org/emersion/libliftoff/-/releases/v0.3.0/downloads/libliftoff-0.3.0.tar.gz
@@ -82,6 +84,7 @@ modules:
         buildsystem: meson
         config-opts:
           - --libdir=lib
+          - --default-library=static
           - -Dxcb-errors=disabled
           - -Dxwayland=enabled
           - -Dexamples=false
@@ -102,6 +105,7 @@ modules:
           - name: seatd
             buildsystem: meson
             config-opts:
+              - --default-library=static
               - -Dlibseat-logind=disabled
               - -Dlibseat-seatd=enabled
               - -Dlibseat-builtin=disabled
@@ -136,6 +140,9 @@ modules:
                   project-id: 5781
                   stable-only: true
                   url-template: https://gitlab.freedesktop.org/libinput/libinput/-/archive/$version/libinput-$version.tar.gz
+              - type: shell
+                commands:
+                  - sed -i '/^lib_libinput =/,/)$/{ s/shared_library/static_library/;/version/d }' meson.build
             cleanup:
               - /bin
               - /etc
@@ -147,6 +154,7 @@ modules:
               - name: libevdev
                 buildsystem: meson
                 config-opts:
+                  - --default-library=static
                   - -Dtests=disabled
                   - -Ddocumentation=disabled
                 sources:
@@ -163,7 +171,7 @@ modules:
 
               - name: mtdev
                 config-opts:
-                  - --disable-static
+                  - --disable-shared
                 sources:
                   - type: archive
                     url: https://bitmath.org/code/mtdev/mtdev-1.1.6.tar.bz2
@@ -177,6 +185,8 @@ modules:
                   - /bin
 
           - name: xorg-xwayland
+            build-options:
+              ldflags: -lfreetype -lz -lfontenc
             buildsystem: meson
             config-opts:
               - -Dsecure-rpc=false
@@ -232,12 +242,15 @@ modules:
                       project-id: 235147
                       stable-only: true
                       url-template: https://xorg.freedesktop.org/releases/individual/lib/libxcvt-$version.tar.xz
+                  - type: shell
+                    commands:
+                      - sed -i '/^libxcvt =/,/)$/{ s/shared_library/static_library/;/version/d }' lib/meson.build
                 cleanup:
                   - /bin
 
               - name: libxfont2
                 config-opts:
-                  - --disable-static
+                  - --disable-shared
                 sources:
                   - type: archive
                     url: https://xorg.freedesktop.org/releases/individual/lib/libXfont2-2.0.6.tar.xz
@@ -251,7 +264,7 @@ modules:
                 modules:
                   - name: libfontenc
                     config-opts:
-                      - --disable-static
+                      - --disable-shared
                     sources:
                       - type: archive
                         url: https://xorg.freedesktop.org/releases/individual/lib/libfontenc-1.1.6.tar.xz
@@ -277,7 +290,7 @@ modules:
 
               - name: xres
                 config-opts:
-                  - --disable-static
+                  - --disable-shared
                 sources:
                   - type: archive
                     url: https://xorg.freedesktop.org/releases/individual/lib/libXres-1.2.1.tar.gz
