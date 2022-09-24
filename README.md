@@ -18,7 +18,7 @@ Another reason is sandboxing X11 applications from each other, while introducing
 
 The Freedesktop runtime defines an extension mount point that bind-mounts any extension with the
 `org.freedesktop.Platform.VulkanLayer` prefix onto a subdirectory of `/usr/lib/extensions/vulkan`.  
-This GameScope extension takes advantage of the above, ands add GameScope and it supporting files to the runtime under
+This GameScope extension takes advantage of the above, and adds GameScope and it supporting files to the runtime under
 `/usr/lib/extensions/vulkan/GameScope`.
 
 Yes, this is a hack, as this specific extension mount point was likely not intended to be used with this kind of tool,
