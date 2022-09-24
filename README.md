@@ -24,17 +24,17 @@ This GameScope extension takes advantage of the above, and adds GameScope and it
 Yes, this is a hack, as this specific extension mount point was likely not intended to be used with this kind of tool,
 and submission of this extension to Flathub might not be approved due to this fact, but that's good enough for my needs.
 
-The extension definition doesn't includes the `add-ld-path` key, and there's no extension key to handle append a
-directory to `PATH`, so we will need to take care of both of these in a different way.
+The extension definition doesn't include the `add-ld-path` key, and there's no extension key to append a directory to
+`PATH`, so we will need to take care of both of these in a different way.
 
-It should be noted that this extension adds a couple of shared libraries that can possibly conflict with those provided
-by the application.  
+It should be noted that this extension introduces a couple of shared libraries that will possibly conflict with those
+provided by an application, if it does packages the same libraries.  
 This includes `libevdev`, `libfontenc`, `libinput`, `libliftoff`, `libmtdev`, `libseat`, `libwlroots`, `libxcvt`, `libXfont2`, `libXRes`.  
-As I haven't made too much use of this extension, this doesn't concern me currently, but I might look into statically
-linking against these libraries.  
-Please file a bug report if you hit an issue due to a wrong shared lib resolution/loading.
+As I haven't made too much use of this extension yet, this doesn't concern me currently, but I might look into statically
+linking against these libraries later.  
+Please file a bug report if you hit an issue related to a wrong shared lib resolution/loading.
 
-While this should be obvious, please be aware that the extension branch/version must match the runtime's one.
+While this should be obvious, be aware that the extension's branch/version must match the runtime's one.
 
 ## How to use
 
@@ -87,5 +87,5 @@ Possibly others are [keyboard modifiers forwarding](https://github.com/Plagman/g
 I don't plan to submit this, and if fact, I'm very much against it due to the current limitations of runtime extensions,
 and the existence of shared libraries in the extension.
 
-If GameScope is actually useful for regular non-games applications, then in my opinion it should be added to the
-runtime, and applications that need a newer version than the runtime's one can bundle their own copy.
+If this GameScope extension is actually useful for existing Flatpak applications, then in my opinion it should be added
+to the runtime, and an application that needs a newer version than the one provided by the runtime can bundle its own.
