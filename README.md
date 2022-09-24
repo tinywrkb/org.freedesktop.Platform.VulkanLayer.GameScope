@@ -79,14 +79,14 @@ $ flatpak run \
 
 ## Limitations
 
-GameScope is not perfect (yet?), and there are a couple of limitations to be aware of.  
-The main one is the [missing clipboard sync support](https://github.com/Plagman/gamescope/issues/303).  
-Possibly others are [keyboard modifiers forwarding](https://github.com/Plagman/gamescope/issues/266), and maybe
-[zero-copy](https://github.com/Plagman/gamescope/issues/64).
+GameScope is not perfect yet, and there are a couple of limitations to be aware of:
+* [Missing clipboard sync support](https://github.com/Plagman/gamescope/issues/303)
+* [No keyboard modifiers forwarding](https://github.com/Plagman/gamescope/issues/266)
+* [Zero-copy](https://github.com/Plagman/gamescope/issues/64) might also be nice to have
 
 ## Possible Flathub submission
 
-I don't plan to submit this, and if fact, I'm very much against it due to the current limitations of runtime extensions,
+I don't plan to submit this, and in fact, I'm very much against it due to the current limitations of runtime extensions,
 and the existence of shared libraries in the extension.
 
 If this GameScope extension is actually useful with existing Flatpak applications, then in my opinion GameScope should
