@@ -1,8 +1,8 @@
 # GameScope Flatpak extension for the Freedesktop runtime
 
 With this Flatpak packaging of [GameScope](https://github.com/Plagman/gamescope) it's possible to run an existing Flatpak
-application through the GameScope compositor without needing to bundle GameScope with application or make any change to
-the existing packaging.
+application through the GameScope compositor without needing to bundle GameScope with the application or make any change
+to the existing packaging of the application.
 
 ## Why
 
@@ -27,16 +27,16 @@ and submission of this extension to Flathub might not be approved due to this fa
 The extension definition doesn't include the `add-ld-path` key, and there's no extension key to append a directory to
 `PATH`, so we will need to take care of both of these in a different way.
 
-It should be noted that this extension introduces a couple of shared libraries that will possibly conflict with those
+While it should be obvious, be aware that the extension's branch/version must match the runtime's one.
+
+It should also be noted that this extension introduces a couple of shared libraries that will possibly conflict with those
 provided by an application, if it does packages the same libraries.  
 This includes `libevdev`, `libfontenc`, `libinput`, `libliftoff`, `libmtdev`, `libseat`, `libwlroots`, `libxcvt`, `libXfont2`, `libXRes`.  
-As I haven't made too much use of this extension yet, this doesn't concern me currently, but I might look into statically
-linking against these libraries later.  
-Please file a bug report if you hit an issue related to a wrong shared lib resolution/loading.  
 There's an experimental [static_libs branch](https://github.com/tinywrkb/org.freedesktop.Platform.VulkanLayer.GameScope/tree/static_libs)
-that avoids adding shared libraries, but it wasn't confirmed that it doesn't introduce regressions.
-
-While this should be obvious, be aware that the extension's branch/version must match the runtime's one.
+that avoids adding shared libraries, but I didn't confirmed that the static_libs branch doesn't introduce regressions.  
+My recommendation is to experiment first the default branch that includes shared libs, and only after this try the
+static_libs branch.  
+If you found a reproducible regression when using the static_libs branch, then please file a bug report here.
 
 ## How to use
 
